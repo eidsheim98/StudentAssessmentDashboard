@@ -7,7 +7,7 @@
 
 import React from 'react';
 import type {PropsWithChildren} from 'react';
-import SADForm from 'C:/Users/Mhwan/CodeMaster/ikt205/StudentAssessmentDashboard/screens/SADForm';
+import SADForm from './screens/ADDForm';
 import { globalStyles } from 'C:/Users/Mhwan/CodeMaster/ikt205/StudentAssessmentDashboard/styles/global';
 
 import {
@@ -35,31 +35,7 @@ import { db } from "./firebaseConfig";
 import { doc, getDoc, setDoc, deleteDoc, updateDoc, collection, onSnapshot } from "firebase/firestore";
 
 
-// Get specific document (only gets the specified one)
-const getData = async () => {
-  const docRef = doc(db, "students", "test");
-  const docSnap = await getDoc(docRef);
-  var g = docSnap.data();
 
-  if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data());
-  } else {
-    // doc.data() will be undefined in this case
-    console.log("No such document!");
-  }
-}
-
-// Get entire collection
-const getCollection = async () => {
-  const colRef = collection(db, "students")
-
-  onSnapshot(colRef, docSnap => {
-      docSnap.forEach(doc =>{
-          console.log(doc.data());
-        })
-      });
-
-}
 
 // Create new students
 const setData = async () => {
@@ -145,7 +121,10 @@ function App(): JSX.Element {
         title="Press me"
         onPress={buttonPressed}
       />
-      <SADForm/>
+       <ScrollView>
+         <SADForm/>
+        </ScrollView>
+     
     </View>
     </SafeAreaView>
   );

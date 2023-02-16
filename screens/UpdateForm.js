@@ -6,13 +6,14 @@ import { db } from "C:/Users/Mhwan/CodeMaster/ikt205/StudentAssessmentDashboard/
 import { doc, getDoc, setDoc, deleteDoc, updateDoc, collection, onSnapshot } from "firebase/firestore";
 
 
-export default function SADForm() {
+export default function UpdateForm() {
     return(
         <View style={globalStyles.sectionContainer}>
             <Formik
             initialValues={{DOB: '', Grade: '', ClassID: '', className: '', fName: '', lName: '', score: ''}}
-            onSubmit={values => {
-                setDoc(doc(db, "students", values.fName + " " + values.lName ), {
+            onSubmit={(values, action) => {
+                action.resetForm();
+                 updateDoc(doc(db, "students", fName + " " + lName), {
                     fName: values.fName,
                     lName: values.lName,
                     classID: values.ClassID,
@@ -56,8 +57,8 @@ export default function SADForm() {
                     ></TextInput>
                      <TextInput
                     style= {globalStyles.inpuut}
-                    placeholder= 'iName'
-                    onChangeText={props.handleChange('iName')}
+                    placeholder= 'lName'
+                    onChangeText={props.handleChange('lName')}
                     value={props.values.lName}
                     ></TextInput>
                     <TextInput
