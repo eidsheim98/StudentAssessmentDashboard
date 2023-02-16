@@ -27,33 +27,68 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "./firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { db } from "./firebaseConfig";
+import { doc, getDoc, setDoc, deleteDoc, updateDoc, collection, onSnapshot } from "firebase/firestore";
 
+
+// Get specific document (only gets the specified one)
 const getData = async () => {
   const docRef = doc(db, "students", "test");
   const docSnap = await getDoc(docRef);
+  var g = docSnap.data();
 
-if (docSnap.exists()) {
-  console.log("Document data:", docSnap.data());
-} else {
-  // doc.data() will be undefined in this case
-  console.log("No such document!");
-}
+  if (docSnap.exists()) {
+    console.log("Document data:", docSnap.data());
+  } else {
+    // doc.data() will be undefined in this case
+    console.log("No such document!");
+  }
 }
 
+// Get entire collection
+const getCollection = async () => {
+  const colRef = collection(db, "students")
+
+  onSnapshot(colRef, docSnap => {
+      docSnap.forEach(doc =>{
+          console.log(doc.data());
+        })
+      });
+
+}
+
+// Create new students
+const setData = async () => {
+  await setDoc(doc(db, "students", "documentID"), {
+    fName: "Ole",
+    lName: "Normann",
+    classID: "ikt205",
+    className:"Applikasjonsutvikling",
+    grade: "A",
+    score: "100"
+  });
+}
+
+// Update student data
+const updateData = async () => {
+  await updateDoc(doc(db, "students", "documentID"), {
+    fName: "Ole",
+    lName: "Normann",
+    classID: "ikt205",
+    className:"Applikasjonsutvikling",
+    grade: "F",
+    score: "1"
+  });
+}
+
+// Delete student data
+const deleteData = async () => {
+  await deleteDoc(doc(db, "students", "documentID"));
+}
+
+// Do stuff on button press
 const buttonPressed = () => {
-  getData();
-  signInWithEmailAndPassword(auth, "nikolai.eidsheim@gmail.com", "Password1.")
-     .then((userCredential) => {
-       // Signed in
-       const user = userCredential.user;
-     })
-     .catch((error) => {
-       const errorCode = error.code;
-       const errorMessage = error.message;
-     });
+  deleteData();
 }
 
  
@@ -107,34 +142,6 @@ function App(): JSX.Element {
         onPress={buttonPressed}
       />
     </View>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
     </SafeAreaView>
   );
 }
