@@ -32,9 +32,8 @@ import { auth, db } from "./firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 
 const getData = async () => {
-  const docRef = doc(db, "students");
+  const docRef = doc(db, "students", "test");
   const docSnap = await getDoc(docRef);
-
 
 if (docSnap.exists()) {
   console.log("Document data:", docSnap.data());
