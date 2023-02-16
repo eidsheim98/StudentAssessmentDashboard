@@ -1,12 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -17,6 +9,8 @@ import {
   Alert,
   useColorScheme,
   View,
+  FlatList,
+  TouchableOpacity,
 } from 'react-native';
 
 import {
@@ -28,141 +22,106 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import { db } from "./firebaseConfig";
-import { doc, getDoc, setDoc, deleteDoc, updateDoc, collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
+import { Row, Rows, Table } from 'react-native-table-component';
+import { globalStyles } from './styles/global';
+import SADForm from './screens/AddForm';
 
-
-// Get specific document (only gets the specified one)
-const getData = async () => {
-  const docRef = doc(db, "students", "test");
-  const docSnap = await getDoc(docRef);
-  var g = docSnap.data();
-
-  if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data());
-  } else {
-    // doc.data() will be undefined in this case
-    console.log("No such document!");
-  }
+interface Student {
+  fName: string;
+  lName: string;
+  classID: string;
+  className: string;
+  grade: string;
+  score: string;
 }
 
-// Get entire collection
-const getCollection = async () => {
-  const colRef = collection(db, "students")
+const App = () => {
+  const [documents, setDocuments] = useState<Student[]>([]);
 
-  onSnapshot(colRef, docSnap => {
-      docSnap.forEach(doc =>{
-          console.log(doc.data());
-        })
+  useEffect(() => {
+    const colRef = collection(db, "students");
+
+    onSnapshot(colRef, (docSnap) => {
+      const newDocuments: Student[] = [];
+
+      docSnap.forEach((doc) => {
+        const data = doc.data() as Student;
+        newDocuments.push(data);
       });
 
-}
+      setDocuments(newDocuments);
+    });
+  }, []);
 
-// Create new students
-const setData = async () => {
-  await setDoc(doc(db, "students", "documentID"), {
-    fName: "Ole",
-    lName: "Normann",
-    classID: "ikt205",
-    className:"Applikasjonsutvikling",
-    grade: "A",
-    score: "100"
-  });
-}
-
-// Update student data
-const updateData = async () => {
-  await updateDoc(doc(db, "students", "documentID"), {
-    fName: "Ole",
-    lName: "Normann",
-    classID: "ikt205",
-    className:"Applikasjonsutvikling",
-    grade: "F",
-    score: "1"
-  });
-}
-
-// Delete student data
-const deleteData = async () => {
-  await deleteDoc(doc(db, "students", "documentID"));
-}
-
-// Do stuff on button press
-const buttonPressed = () => {
-  deleteData();
-}
-
- 
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+  const tableHead = ['First Name', 'Last Name', 'Class ID', 'Class Name', 'Grade', 'Score', 'Actions'];
+  const tableData = documents.map((document) => {
+    const { fName, lName, classID, className, grade, score } = document;
+    return [fName, lName, classID, className, grade, score, 
+      <View style={globalStyles.buttonContainer}>
+      <TouchableOpacity onPress={() => handleEditScore(document)}>
+        <Text style={globalStyles.buttonText}>Edit</Text>
+      </TouchableOpacity>
     </View>
-  );
-}
+    ];
+  });
 
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const handleEditScore = (document: Student) => {
+    // You can open a modal or navigate to another screen here to edit the score
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView>
+      <ScrollView>
       <View>
-      <Text>
-        The title and onPress handler are required. It is recommended to set
-        accessibilityLabel to help make your app usable by everyone.
-      </Text>
-      <Button
-        title="Press me"
-        onPress={buttonPressed}
-      />
+      <SADForm/>
     </View>
+    <View style={globalStyles.container}>
+      <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
+        <Row data={tableHead} style={globalStyles.head} textStyle={{ fontWeight: 'bold', fontSize: 16 }} />
+        <Rows data={tableData} textStyle={globalStyles.text} />
+      </Table>
+    </View>
+    </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+
+
+const stylgites = StyleSheet.create({
+  buttonContainer: {
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    backgroundColor: '#AADDFF',
+    borderRadius: 2,
+  },
+  buttonText: {
+    fontSize: 12,
+    color: 'black',
+  },
+  container: { 
+    flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' 
+  },
+  scrollView: {
+    backgroundColor: Colors.lighter,
+  },
+  body: {
+    backgroundColor: Colors.white,
   },
   sectionTitle: {
     fontSize: 24,
     fontWeight: '600',
+    textAlign: 'center',
+    marginTop: 32,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  head: {
+    height: 40,
+    backgroundColor: '#f1f8ff'
   },
-  highlight: {
-    fontWeight: '700',
-  },
+  text: {
+    margin: 6
+  }
 });
 
 export default App;
