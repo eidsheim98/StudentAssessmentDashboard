@@ -13,6 +13,8 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  Button,
+  Alert,
   useColorScheme,
   View,
 } from 'react-native';
@@ -24,6 +26,37 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "./firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
+
+const getData = async () => {
+  const docRef = doc(db, "students", "test");
+  const docSnap = await getDoc(docRef);
+
+if (docSnap.exists()) {
+  console.log("Document data:", docSnap.data());
+} else {
+  // doc.data() will be undefined in this case
+  console.log("No such document!");
+}
+}
+
+const buttonPressed = () => {
+  getData();
+  signInWithEmailAndPassword(auth, "nikolai.eidsheim@gmail.com", "Password1.")
+     .then((userCredential) => {
+       // Signed in
+       const user = userCredential.user;
+     })
+     .catch((error) => {
+       const errorCode = error.code;
+       const errorMessage = error.message;
+     });
+}
+
+ 
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -64,6 +97,16 @@ function App(): JSX.Element {
 
   return (
     <SafeAreaView style={backgroundStyle}>
+      <View>
+      <Text>
+        The title and onPress handler are required. It is recommended to set
+        accessibilityLabel to help make your app usable by everyone.
+      </Text>
+      <Button
+        title="Press me"
+        onPress={buttonPressed}
+      />
+    </View>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
