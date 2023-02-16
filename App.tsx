@@ -5,10 +5,10 @@
  * @format
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import type {PropsWithChildren} from 'react';
-import SADForm from './screens/ADDForm';
-import { globalStyles } from 'C:/Users/Mhwan/CodeMaster/ikt205/StudentAssessmentDashboard/styles/global';
+import SADForm from '/home/nikolai/WebstormProjects/StudentAssessmentDashboard/screens/AddForm';
+import { globalStyles } from '/home/nikolai/WebstormProjects/StudentAssessmentDashboard/styles/global';
 
 import {
   SafeAreaView,
@@ -20,7 +20,8 @@ import {
   Alert,
   useColorScheme,
   View,
-  TextInput
+  TextInput,
+  TouchableOpacity,
 } from 'react-native';
 
 import {
@@ -33,9 +34,7 @@ import {
 
 import { db } from "./firebaseConfig";
 import { doc, getDoc, setDoc, deleteDoc, updateDoc, collection, onSnapshot } from "firebase/firestore";
-
-
-
+import { Row, Rows, Table } from 'react-native-table-component';
 
 // Create new students
 const setData = async () => {
@@ -47,6 +46,22 @@ const setData = async () => {
     grade: "A",
     score: "100"
   });
+  const [documents, setDocuments] = useState<Student[]>([]);
+
+  useEffect(() => {
+    const colRef = collection(db, "students");
+
+    onSnapshot(colRef, (docSnap) => {
+      const newDocuments: Student[] = [];
+
+      docSnap.forEach((doc) => {
+        const data = doc.data() as Student;
+        newDocuments.push(data);
+      });
+
+      setDocuments(newDocuments);
+    });
+  }, []);
 }
 
 // Update student data
@@ -103,8 +118,50 @@ function Section({children, title}: SectionProps): JSX.Element {
   );
 }
 
+interface Student {
+  fName: string;
+  lName: string;
+  classID: string;
+  className: string;
+  grade: string;
+  score: string;
+}
+
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+
+  const [documents, setDocuments] = useState<Student[]>([]);
+
+  useEffect(() => {
+    const colRef = collection(db, "students");
+
+    onSnapshot(colRef, (docSnap) => {
+      const newDocuments: Student[] = [];
+
+      docSnap.forEach((doc) => {
+        const data = doc.data() as Student;
+        newDocuments.push(data);
+      });
+
+      setDocuments(newDocuments);
+    });
+  }, []);
+
+  const tableHead = ['First Name', 'Last Name', 'Class ID', 'Class Name', 'Grade', 'Score', 'Actions'];
+  const tableData = documents.map((document) => {
+    const { fName, lName, classID, className, grade, score } = document;
+    return [fName, lName, classID, className, grade, score, 
+      <View style={globalStyles.buttonContainer}>
+      <TouchableOpacity onPress={() => handleEditScore(document)}>
+        <Text style={globalStyles.buttonText}>Edit</Text>
+      </TouchableOpacity>
+    </View>
+    ];
+  });
+
+  const handleEditScore = (document: Student) => {
+    // You can open a modal or navigate to another screen here to edit the score
+  };
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -126,10 +183,13 @@ function App(): JSX.Element {
         </ScrollView>
      
     </View>
+    <View style={globalStyles.container}>
+      <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
+        <Row data={tableHead} style={globalStyles.head} textStyle={{ fontWeight: 'bold', fontSize: 16 }} />
+        <Rows data={tableData} textStyle={globalStyles.text} />
+      </Table>
+    </View>
     </SafeAreaView>
   );
 }
-
-
-
 export default App;

@@ -1,8 +1,8 @@
 import REACT from 'react';
 import { StyleSheet, Button, TextInput, View, Text } from 'react-native/';
 import { Formik} from 'formik';
-import { globalStyles } from 'C:/Users/Mhwan/CodeMaster/ikt205/StudentAssessmentDashboard/styles/global';
-import { db } from "C:/Users/Mhwan/CodeMaster/ikt205/StudentAssessmentDashboard/firebaseConfig.js";
+import { globalStyles } from '/home/nikolai/WebstormProjects/StudentAssessmentDashboard/styles/global';
+import { db } from "/home/nikolai/WebstormProjects/StudentAssessmentDashboard/firebaseConfig.js";
 import { doc, getDoc, setDoc, deleteDoc, updateDoc, collection, onSnapshot } from "firebase/firestore";
 
 
