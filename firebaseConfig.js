@@ -5,21 +5,12 @@ import {initializeFirestore} from 'firebase/firestore';
 // Your web app's Firebase configuration
 
 const firebaseConfig = {
-
-  apiKey: "AIzaSyABLfzkfo42XkMwccWpWwureU1rugE0FAs",
-
-  authDomain: "agent-name-66cf8.firebaseapp.com",
-
-  databaseURL: "https://agent-name-66cf8.firebaseio.com",
-
-  projectId: "agent-name-66cf8",
-
-  storageBucket: "agent-name-66cf8.appspot.com",
-
-  messagingSenderId: "584218302359",
-
-  appId: "1:584218302359:web:b1da9a173c6bb3ffe696d2"
-
+  apiKey: "AIzaSyDJzX2r4cRf5yt3ZXGTVs8gXSWMaEaB4zI",
+  authDomain: "sad-markus.firebaseapp.com",
+  projectId: "sad-markus",
+  storageBucket: "sad-markus.appspot.com",
+  messagingSenderId: "1022960277645",
+  appId: "1:1022960277645:web:e93e8dfae4cf59a04aeac4"
 };
 
 

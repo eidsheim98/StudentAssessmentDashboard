@@ -7,6 +7,9 @@
 
 import React from 'react';
 import type {PropsWithChildren} from 'react';
+import SADForm from 'C:/Users/Mhwan/CodeMaster/ikt205/StudentAssessmentDashboard/screens/SADForm';
+import { globalStyles } from 'C:/Users/Mhwan/CodeMaster/ikt205/StudentAssessmentDashboard/styles/global';
+
 import {
   SafeAreaView,
   ScrollView,
@@ -17,6 +20,7 @@ import {
   Alert,
   useColorScheme,
   View,
+  TextInput
 } from 'react-native';
 
 import {
@@ -100,10 +104,10 @@ type SectionProps = PropsWithChildren<{
 function Section({children, title}: SectionProps): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.sectionContainer}>
+    <View style={globalStyles.sectionContainer}>
       <Text
         style={[
-          styles.sectionTitle,
+          globalStyles.sectionTitle,
           {
             color: isDarkMode ? Colors.white : Colors.black,
           },
@@ -112,7 +116,7 @@ function Section({children, title}: SectionProps): JSX.Element {
       </Text>
       <Text
         style={[
-          styles.sectionDescription,
+          globalStyles.sectionDescription,
           {
             color: isDarkMode ? Colors.light : Colors.dark,
           },
@@ -141,28 +145,12 @@ function App(): JSX.Element {
         title="Press me"
         onPress={buttonPressed}
       />
+      <SADForm/>
     </View>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+
 
 export default App;
