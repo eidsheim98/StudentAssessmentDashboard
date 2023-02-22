@@ -21,8 +21,8 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { db } from "./firebaseConfig";
-import { collection, onSnapshot } from "firebase/firestore";
+import { auth, db } from "./firebaseConfig";
+import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { Row, Rows, Table } from 'react-native-table-component';
 import { globalStyles } from './styles/global';
 import SADForm from './screens/AddForm';
@@ -30,6 +30,7 @@ import SADForm from './screens/AddForm';
 interface Student {
   fName: string;
   lName: string;
+  DOB: string;
   classID: string;
   className: string;
   grade: string;
@@ -54,17 +55,56 @@ const App = () => {
     });
   }, []);
 
-  const tableHead = ['First Name', 'Last Name', 'Class ID', 'Class Name', 'Grade', 'Score', 'Actions'];
+  const tableHead = [
+    'First Name',
+    'Last Name',
+    'DOB',
+    'Class ID',
+    'Class Name',
+    'Grade',
+    'Score',
+    'Edit', 
+    'Remove'
+  ];
+
   const tableData = documents.map((document) => {
-    const { fName, lName, classID, className, grade, score } = document;
-    return [fName, lName, classID, className, grade, score, 
+    const { fName, lName, DOB, classID, className, grade, score } = document;
+    return [
+      fName,
+      lName,
+      DOB,
+      classID,
+      className,
+      grade,
+      score,
       <View style={globalStyles.buttonContainer}>
-      <TouchableOpacity onPress={() => handleEditScore(document)}>
-        <Text style={globalStyles.buttonText}>Edit</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity onPress={() => handleEditScore(document)}>
+          <Text style={globalStyles.buttonText}>Edit</Text>
+        </TouchableOpacity>
+      </View>,
+      ,
+      <View style={globalStyles.buttonContainer}>
+        <TouchableOpacity onPress={() => removeDetails(document)}>
+          <Text style={globalStyles.buttonText}>Remove</Text>
+        </TouchableOpacity>
+      </View>
     ];
   });
+
+  const removeDetails = (document: Student) => {
+    const colRef = collection(db, "students");
+    const docRef = doc(colRef, document.fName + " " + document.lName);
+    console.log(document.lName); // add this line to check if student.id is being passed correctly
+    console.log(auth.currentUser);
+
+    deleteDoc(docRef)
+      .then(() => {
+      console.log("Document successfully deleted!");
+      })
+      .catch((error) => {
+      console.error("Error removing document: ", error);
+    });
+  };
 
   const handleEditScore = (document: Student) => {
     // You can open a modal or navigate to another screen here to edit the score
