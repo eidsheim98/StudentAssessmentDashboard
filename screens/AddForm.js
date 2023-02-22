@@ -16,6 +16,7 @@ export default function SADForm() {
                 setDoc(doc(db, "students", values.fName + " " + values.lName ), {
                     fName: values.fName,
                     lName: values.lName,
+                    DOB: values.DOB,
                     classID: values.ClassID,
                     className: values.className,
                     grade: values.Grade,
