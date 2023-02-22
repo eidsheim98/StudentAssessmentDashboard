@@ -25,7 +25,7 @@ import { auth, db } from "./firebaseConfig";
 import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { Row, Rows, Table } from 'react-native-table-component';
 import { globalStyles } from './styles/global';
-import SADForm from './screens/AddForm';
+import StudentForm from './screens/AddForm';
 
 interface Student {
   fName: string;
@@ -67,29 +67,39 @@ const App = () => {
     'Remove'
   ];
 
-  const tableData = documents.map((document) => {
-    const { fName, lName, DOB, classID, className, grade, score } = document;
-    return [
-      fName,
-      lName,
-      DOB,
-      classID,
-      className,
-      grade,
-      score,
-      <View style={globalStyles.buttonContainer}>
-        <TouchableOpacity onPress={() => handleEditScore(document)}>
-          <Text style={globalStyles.buttonText}>Edit</Text>
-        </TouchableOpacity>
-      </View>,
-      ,
-      <View style={globalStyles.buttonContainer}>
-        <TouchableOpacity onPress={() => removeDetails(document)}>
-          <Text style={globalStyles.buttonText}>Remove</Text>
-        </TouchableOpacity>
-      </View>
-    ];
-  });
+  const studentData = (setValues:any) => {
+    return documents.map((document) => {
+      const { fName, lName, DOB, classID, className, grade, score } = document;
+      return [
+        fName,
+        lName,
+        DOB,
+        classID,
+        className,
+        grade,
+        score,
+        <View style={globalStyles.buttonContainer}>
+          <TouchableOpacity onPress={() => setValues({
+            "fName": fName,
+            "lName": lName,
+            "DOB": DOB,
+            "ClassID": classID,
+            "className": className,
+            "Grade": grade,
+            "score": score
+            })}>
+            <Text style={globalStyles.buttonText}>Edit</Text>
+          </TouchableOpacity>
+        </View>,
+        ,
+        <View style={globalStyles.buttonContainer}>
+          <TouchableOpacity onPress={() => removeDetails(document)}>
+            <Text style={globalStyles.buttonText}>Remove</Text>
+          </TouchableOpacity>
+        </View>
+      ];
+    });
+  }
 
   const removeDetails = (document: Student) => {
     const colRef = collection(db, "students");
@@ -114,13 +124,7 @@ const App = () => {
     <SafeAreaView>
       <ScrollView>
       <View>
-      <SADForm/>
-    </View>
-    <View style={globalStyles.container}>
-      <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
-        <Row data={tableHead} style={globalStyles.head} textStyle={{ fontWeight: 'bold', fontSize: 16 }} />
-        <Rows data={tableData} textStyle={globalStyles.text} />
-      </Table>
+      <StudentForm tableData={studentData} />
     </View>
     </ScrollView>
     </SafeAreaView>

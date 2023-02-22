@@ -1,12 +1,45 @@
-import REACT from 'react';
+import REACT, { useState } from 'react';
 import { StyleSheet, Button, TextInput, View, Text } from 'react-native/';
 import { Formik} from 'formik';
 import { globalStyles } from '/home/nikolai/WebstormProjects/StudentAssessmentDashboard/styles/global';
 import { db } from "/home/nikolai/WebstormProjects/StudentAssessmentDashboard/firebaseConfig.js";
 import { doc, getDoc, setDoc, deleteDoc, updateDoc, collection, onSnapshot } from "firebase/firestore";
+import { Table, Row, Rows } from 'react-native-table-component';
 
+interface StudentProps {
+    tableData:(setValues: any) => (string | JSX.Element | undefined)[][]
+}
 
-export default function SADForm() {
+const tableHead = [
+    'First Name',
+    'Last Name',
+    'DOB',
+    'Class ID',
+    'Class Name',
+    'Grade',
+    'Score',
+    'Edit', 
+    'Remove'
+  ];
+
+interface StudentData {
+    tableData:(string | JSX.Element | undefined)[][],
+    tableHead:string[],
+    setValues: any
+}
+
+const StudentTable: React.FC<StudentData> = ({tableData, tableHead, setValues}) => {
+    const [newTableData, setTableData] = useState<string>("")
+
+    return(
+        <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
+        <Row data={tableHead} style={globalStyles.head} textStyle={{ fontWeight: 'bold', fontSize: 16 }} />
+        <Rows data={tableData} textStyle={globalStyles.text} />
+      </Table>
+    )
+}
+
+const StudentForm: React.FC<StudentProps> = ({tableData}) => {    
     return(
         <View style={globalStyles.sectionContainer}>
             <Formik
@@ -69,10 +102,14 @@ export default function SADForm() {
                     value={props.values.score}
                     ></TextInput>
                     <Button title='submit' color='maroon' onPress={props.handleSubmit}></Button>
-                </View>
+                    <Button title='clear' color='blue' onPress={props.handleReset}></Button>
+                    <StudentTable tableData={tableData(props.setValues)} tableHead={tableHead} setValues={props.setValues}/>                
+                    </View>
             )}
             </Formik>
 
         </View>
     )
 }
+
+export default StudentForm;
