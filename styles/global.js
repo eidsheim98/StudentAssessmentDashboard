@@ -18,12 +18,13 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
     highlight: {
       fontWeight: '700',
     },
-    inpuut: {
+    input: {
       borderWidth: 1,
       borderColor: '#ddd',
       padding: 13,
       fontSize: 8,
       borderRadius: 6,
+      color: 'black',
     },
     buttonContainer: {
       paddingVertical: 4,
@@ -36,7 +37,7 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
       color: 'black',
     },
     container: { 
-      flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' 
+      flex: 1, padding: 16, paddingTop: 30, backgroundColor: 'white' 
     },
     scrollView: {
       backgroundColor: Colors.lighter,
@@ -55,6 +56,10 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
       backgroundColor: '#f1f8ff'
     },
     text: {
-      margin: 6
+      margin: 6,
+      color: 'black'
+    },
+    hidden:{
+      display: "none"
     }
   });
