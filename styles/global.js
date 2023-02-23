@@ -18,7 +18,7 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
     highlight: {
       fontWeight: '700',
     },
-    inpuut: {
+    input: {
       borderWidth: 1,
       borderColor: '#ddd',
       padding: 13,

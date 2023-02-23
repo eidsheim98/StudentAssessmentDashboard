@@ -11,13 +11,13 @@ interface StudentProps {
 }
 
 const tableHead = [
+    'Class ID',
     'First Name',
     'Last Name',
     'DOB',
-    'Class ID',
     'Class Name',
-    'Grade',
     'Score',
+    'Grade',
     'Edit', 
     'Remove'
   ];
@@ -43,7 +43,7 @@ const StudentForm: React.FC<StudentProps> = ({tableData}) => {
     return(
         <View style={globalStyles.sectionContainer}>
             <Formik
-            initialValues={{DOB: '', Grade: '', ClassID: '', className: '', fName: '', lName: '', score: '', timestamp: ""}}
+            initialValues={{ClassID: '', fName: '', lName: '', DOB: '', className: '', score: '', Grade: '', timestamp: ""}}
             onSubmit={(values, action) => {
                 action.resetForm();
                 let t = "";
@@ -53,13 +53,13 @@ const StudentForm: React.FC<StudentProps> = ({tableData}) => {
                     t = values.timestamp;
                 }
                 setDoc(doc(db, "students", t ), {
+                    classID: values.ClassID,
                     fName: values.fName,
                     lName: values.lName,
                     DOB: values.DOB,
-                    classID: values.ClassID,
                     className: values.className,
-                    grade: values.Grade,
                     score: values.score,
+                    grade: values.Grade,
                     timestamp: t
                   });
             }}
@@ -72,47 +72,47 @@ const StudentForm: React.FC<StudentProps> = ({tableData}) => {
                     onChangeText={props.handleChange('Timestamp')}
                     value={props.values.timestamp}
                     ></TextInput>
-                    <TextInput
-                    style= {globalStyles.inpuut}
-                    placeholder= 'DOB'
-                    onChangeText={props.handleChange('DOB')}
-                    value={props.values.DOB}
-                    ></TextInput>
-                    <TextInput
-                    style= {globalStyles.inpuut}
-                    placeholder= 'Grade'
-                    onChangeText={props.handleChange('Grade')}
-                    value={props.values.Grade}
-                    ></TextInput>
-                    <TextInput
-                    style= {globalStyles.inpuut}
+                     <TextInput
+                    style= {globalStyles.input}
                     placeholder= 'ClassID'
                     onChangeText={props.handleChange('ClassID')}
                     value={props.values.ClassID}
                     ></TextInput>
                     <TextInput
-                    style= {globalStyles.inpuut}
-                    placeholder= 'className'
-                    onChangeText={props.handleChange('className')}
-                    value={props.values.className}
-                    ></TextInput>
-                     <TextInput
-                    style= {globalStyles.inpuut}
+                    style= {globalStyles.input}
                     placeholder= 'fName'
                     onChangeText={props.handleChange('fName')}
                     value={props.values.fName}
                     ></TextInput>
-                     <TextInput
-                    style= {globalStyles.inpuut}
+                    <TextInput
+                    style= {globalStyles.input}
                     placeholder= 'lName'
                     onChangeText={props.handleChange('lName')}
                     value={props.values.lName}
                     ></TextInput>
                     <TextInput
-                    style= {globalStyles.inpuut}
+                    style= {globalStyles.input}
+                    placeholder= 'DOB'
+                    onChangeText={props.handleChange('DOB')}
+                    value={props.values.DOB}
+                    ></TextInput>
+                    <TextInput
+                    style= {globalStyles.input}
+                    placeholder= 'className'
+                    onChangeText={props.handleChange('className')}
+                    value={props.values.className}
+                    ></TextInput>
+                    <TextInput
+                    style= {globalStyles.input}
                     placeholder= 'score'
                     onChangeText={props.handleChange('score')}
                     value={props.values.score}
+                    ></TextInput>
+                    <TextInput
+                    style= {globalStyles.input}
+                    placeholder= 'Grade'
+                    onChangeText={props.handleChange('Grade')}
+                    value={props.values.Grade}
                     ></TextInput>
                     <Button title='submit' color='maroon' onPress={props.handleSubmit}></Button>
                     <Button title='clear' color='blue' onPress={props.handleReset}></Button>
