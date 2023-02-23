@@ -48,6 +48,8 @@ interface Student {
 const App = () => {
   const [documents, setDocuments] = useState<Student[]>([]);
   const [classIDs, setClassIDs] = useState<string[]>([]);
+  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedClassGrades, setSelectedClassGrades] = useState<string[]>([]);
 
   useEffect(() => {
     const colRef = collection(db, "students");
@@ -133,7 +135,6 @@ const App = () => {
   };
 
 
-  const [selectedValue, setSelectedValue] = useState('');
 
   const chartConfig = {
     backgroundGradientFrom: 'white',
@@ -145,9 +146,16 @@ const App = () => {
     labels: ["A", "B", "C", "D", "E", "F"],
     datasets: [
       {
-        data: [20, 45, 28, 80, 99, 43]
-      }
-    ]
+        data: [
+          selectedClassGrades.filter((grade) => grade === 'A').length,
+          selectedClassGrades.filter((grade) => grade === 'B').length,
+          selectedClassGrades.filter((grade) => grade === 'C').length,
+          selectedClassGrades.filter((grade) => grade === 'D').length,
+          selectedClassGrades.filter((grade) => grade === 'E').length,
+          selectedClassGrades.filter((grade) => grade === 'F').length,
+        ],
+      },
+    ],
   };
 
   return (
@@ -157,7 +165,13 @@ const App = () => {
           <Text>Select a class ID:</Text>
           <Picker
             selectedValue={selectedValue}
-            onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+            onValueChange={(itemValue, itemIndex) => {
+              setSelectedValue(itemValue);
+              const grades = documents
+                .filter((doc) => doc.classID === itemValue)
+                .map((doc) => doc.grade);
+              setSelectedClassGrades(grades);
+            }}
           >
             {classIDs.map((id, index) => (
               <Picker.Item key={index} label={id} value={id} />
@@ -166,15 +180,19 @@ const App = () => {
           <Text>Selected class ID: {selectedValue}</Text>
         </View>
         <View>
-          <BarChart
-            data={chartData}
-            width={Dimensions.get("window").width - 16}
-            height={220}
-            yAxisLabel="$"
-            yAxisSuffix="$"
-            chartConfig={chartConfig}
-            verticalLabelRotation={0}
-          />
+          {selectedValue ? (
+            <BarChart
+              data={chartData}
+              width={Dimensions.get("window").width - 16}
+              height={220}
+              yAxisLabel="$"
+              yAxisSuffix="$"
+              chartConfig={chartConfig}
+              verticalLabelRotation={0}
+            />
+          ) : (
+            <Text>Select a class ID to view grades</Text>
+          )}
         </View>
         <View>
           <StudentForm tableData={studentData} />
