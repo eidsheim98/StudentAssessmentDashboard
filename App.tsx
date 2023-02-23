@@ -26,6 +26,7 @@ import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { Row, Rows, Table } from 'react-native-table-component';
 import { globalStyles } from './styles/global';
 import StudentForm from './screens/AddForm';
+import BarChart from "./screens/Charts"
 
 interface Student {
   fName: string;
@@ -120,11 +121,15 @@ const App = () => {
     // You can open a modal or navigate to another screen here to edit the score
   };
 
+  var grades: number[] = [2,5,0,0,0,0,0]
+  var m = new Map<string, string[]>();
+
   return (
     <SafeAreaView>
       <ScrollView>
       <View>
       <StudentForm tableData={studentData} />
+      <BarChart grades={grades} />
     </View>
     </ScrollView>
     </SafeAreaView>
