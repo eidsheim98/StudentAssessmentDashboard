@@ -8,12 +8,11 @@ import { Table, Row, Rows } from 'react-native-table-component';
 
 
 
-export default function Home({ navigation }: { navigation: any }) {
+export default function FormDatabase({ navigation }: { navigation: any }) {
     const presshandler = () => {
-        navigation.navigate('BarChart')
+        navigation.navigate('barChart')
     }
-
-
+    
     interface Student {
         fName: string;
         lName: string;

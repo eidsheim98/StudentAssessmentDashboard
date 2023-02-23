@@ -8,7 +8,7 @@ const screens = {
     FormDatabase: {
         screen: FormDatabase
     },
-    BarChart:
+    barChart:
     {
         screen: barChart
     }
