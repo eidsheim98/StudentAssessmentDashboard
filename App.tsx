@@ -28,13 +28,13 @@ import { globalStyles } from './styles/global';
 import StudentForm from './screens/AddForm';
 
 interface Student {
+  classID: string;
   fName: string;
   lName: string;
   DOB: string;
-  classID: string;
   className: string;
-  grade: string;
   score: string;
+  grade: string;
   timestamp: string;
 }
 
@@ -57,37 +57,37 @@ const App = () => {
   }, []);
 
   const tableHead = [
+    'Class ID',
     'First Name',
     'Last Name',
     'DOB',
-    'Class ID',
     'Class Name',
-    'Grade',
     'Score',
+    'Grade',
     'Edit', 
     'Remove'
   ];
 
   const studentData = (setValues:any) => {
     return documents.map((document) => {
-      const { fName, lName, DOB, classID, className, grade, score, timestamp } = document;
+      const { classID, fName, lName, DOB, className, score, grade, timestamp } = document;
       return [
+        classID,
         fName,
         lName,
         DOB,
-        classID,
         className,
-        grade,
         score,
+        grade,
         <View style={globalStyles.buttonContainer}>
           <TouchableOpacity onPress={() => setValues({
+            "ClassID": classID,
             "fName": fName,
             "lName": lName,
             "DOB": DOB,
-            "ClassID": classID,
             "className": className,
-            "Grade": grade,
             "score": score,
+            "Grade": grade,
             "timestamp": timestamp
             })}>
             <Text style={globalStyles.buttonText}>Edit</Text>
