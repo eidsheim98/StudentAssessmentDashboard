@@ -26,6 +26,8 @@ import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { Row, Rows, Table } from 'react-native-table-component';
 import { globalStyles } from './styles/global';
 import StudentForm from './screens/AddForm';
+import BarChart from "./screens/Charts"
+import { Dimensions } from 'react-native';
 
 interface Student {
   fName: string;
@@ -36,6 +38,8 @@ interface Student {
   grade: string;
   score: string;
 }
+
+var grades: number[] = [2,5,0,0,0,0,0]
 
 const App = () => {
   const [documents, setDocuments] = useState<Student[]>([]);
@@ -125,47 +129,11 @@ const App = () => {
       <ScrollView>
       <View>
       <StudentForm tableData={studentData} />
+      <BarChart grades={grades} />
     </View>
     </ScrollView>
     </SafeAreaView>
   );
 };
-
-
-
-const stylgites = StyleSheet.create({
-  buttonContainer: {
-    paddingVertical: 4,
-    paddingHorizontal: 6,
-    backgroundColor: '#AADDFF',
-    borderRadius: 2,
-  },
-  buttonText: {
-    fontSize: 12,
-    color: 'black',
-  },
-  container: { 
-    flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' 
-  },
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginTop: 32,
-  },
-  head: {
-    height: 40,
-    backgroundColor: '#f1f8ff'
-  },
-  text: {
-    margin: 6
-  }
-});
 
 export default App;

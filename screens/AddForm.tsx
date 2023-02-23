@@ -25,10 +25,9 @@ const tableHead = [
 interface StudentData {
     tableData:(string | JSX.Element | undefined)[][],
     tableHead:string[],
-    setValues: any
 }
 
-const StudentTable: React.FC<StudentData> = ({tableData, tableHead, setValues}) => {
+const StudentTable: React.FC<StudentData> = ({tableData, tableHead}) => {
     const [newTableData, setTableData] = useState<string>("")
 
     return(
@@ -103,7 +102,7 @@ const StudentForm: React.FC<StudentProps> = ({tableData}) => {
                     ></TextInput>
                     <Button title='submit' color='maroon' onPress={props.handleSubmit}></Button>
                     <Button title='clear' color='blue' onPress={props.handleReset}></Button>
-                    <StudentTable tableData={tableData(props.setValues)} tableHead={tableHead} setValues={props.setValues}/>                
+                    <StudentTable tableData={tableData(props.setValues)} tableHead={tableHead}/>                
                     </View>
             )}
             </Formik>
