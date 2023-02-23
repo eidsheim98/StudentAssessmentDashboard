@@ -35,6 +35,7 @@ interface Student {
   className: string;
   grade: string;
   score: string;
+  timestamp: string;
 }
 
 const App = () => {
@@ -69,7 +70,7 @@ const App = () => {
 
   const studentData = (setValues:any) => {
     return documents.map((document) => {
-      const { fName, lName, DOB, classID, className, grade, score } = document;
+      const { fName, lName, DOB, classID, className, grade, score, timestamp } = document;
       return [
         fName,
         lName,
@@ -86,7 +87,8 @@ const App = () => {
             "ClassID": classID,
             "className": className,
             "Grade": grade,
-            "score": score
+            "score": score,
+            "timestamp": timestamp
             })}>
             <Text style={globalStyles.buttonText}>Edit</Text>
           </TouchableOpacity>
@@ -103,9 +105,7 @@ const App = () => {
 
   const removeDetails = (document: Student) => {
     const colRef = collection(db, "students");
-    const docRef = doc(colRef, document.fName + " " + document.lName);
-    console.log(document.lName); // add this line to check if student.id is being passed correctly
-    console.log(auth.currentUser);
+    const docRef = doc(colRef, document.timestamp);
 
     deleteDoc(docRef)
       .then(() => {
@@ -130,42 +130,5 @@ const App = () => {
     </SafeAreaView>
   );
 };
-
-
-
-const stylgites = StyleSheet.create({
-  buttonContainer: {
-    paddingVertical: 4,
-    paddingHorizontal: 6,
-    backgroundColor: '#AADDFF',
-    borderRadius: 2,
-  },
-  buttonText: {
-    fontSize: 12,
-    color: 'black',
-  },
-  container: { 
-    flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' 
-  },
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginTop: 32,
-  },
-  head: {
-    height: 40,
-    backgroundColor: '#f1f8ff'
-  },
-  text: {
-    margin: 6
-  }
-});
 
 export default App;

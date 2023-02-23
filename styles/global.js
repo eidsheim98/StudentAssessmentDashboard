@@ -56,5 +56,8 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
     },
     text: {
       margin: 6
+    },
+    hidden:{
+      display: "none"
     }
   });

@@ -28,7 +28,7 @@ interface StudentData {
     setValues: any
 }
 
-const StudentTable: React.FC<StudentData> = ({tableData, tableHead, setValues}) => {
+const StudentTable: React.FC<StudentData> = ({tableData, tableHead}) => {
     const [newTableData, setTableData] = useState<string>("")
 
     return(
@@ -43,22 +43,35 @@ const StudentForm: React.FC<StudentProps> = ({tableData}) => {
     return(
         <View style={globalStyles.sectionContainer}>
             <Formik
-            initialValues={{DOB: '', Grade: '', ClassID: '', className: '', fName: '', lName: '', score: ''}}
+            initialValues={{DOB: '', Grade: '', ClassID: '', className: '', fName: '', lName: '', score: '', timestamp: ""}}
             onSubmit={(values, action) => {
                 action.resetForm();
-                setDoc(doc(db, "students", values.fName + " " + values.lName ), {
+                let t = "";
+                if (values.timestamp == "") {
+                    t = Date.now().toString();
+                } else {
+                    t = values.timestamp;
+                }
+                setDoc(doc(db, "students", t ), {
                     fName: values.fName,
                     lName: values.lName,
                     DOB: values.DOB,
                     classID: values.ClassID,
                     className: values.className,
                     grade: values.Grade,
-                    score: values.score
+                    score: values.score,
+                    timestamp: t
                   });
             }}
             >
             {(props) => (
                 <View>
+                    <TextInput
+                    style= {globalStyles.hidden}
+                    placeholder= 'Timestamp'
+                    onChangeText={props.handleChange('Timestamp')}
+                    value={props.values.timestamp}
+                    ></TextInput>
                     <TextInput
                     style= {globalStyles.inpuut}
                     placeholder= 'DOB'
