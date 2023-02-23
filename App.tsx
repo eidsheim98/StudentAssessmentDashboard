@@ -45,6 +45,21 @@ interface Student {
   timestamp: string;
 }
 
+var map = new Map<string, string[]>()
+
+const calculate = (document:any) => {
+  var gradelist = map.get(document.classID);
+  if (gradelist == null) {
+    gradelist = [];
+    gradelist.push(document.grade);
+    map.set(document.classID, gradelist);
+  }
+  else {
+    gradelist.push(document.grade);
+    map.set(document.classID, gradelist);
+  }
+}
+
 const App = () => {
   const [documents, setDocuments] = useState<Student[]>([]);
   const [classIDs, setClassIDs] = useState<string[]>([]);
@@ -61,6 +76,7 @@ const App = () => {
         const data = doc.data() as Student;
         newDocuments.push(data);
         newClassIDs.push(data.classID);
+        calculate(doc)
       });
 
       setDocuments(newDocuments);
@@ -134,6 +150,21 @@ const App = () => {
 
 
   const [selectedValue, setSelectedValue] = useState('');
+  const [cData, setcData] = useState<number[]>([]);
+
+  useEffect(() => {
+    var grades = map.get(selectedValue);
+    var gradelist = [
+      grades?.filter(grade => grade === "A"),
+      grades?.filter(grade => grade === "B"),
+      grades?.filter(grade => grade === "C"),
+      grades?.filter(grade => grade === "D"),
+      grades?.filter(grade => grade === "E"),
+      grades?.filter(grade => grade === "F"),
+    ]
+ 
+    setcData([]);
+   },[selectedValue]);
 
   const chartConfig = {
     backgroundGradientFrom: 'white',
@@ -145,7 +176,7 @@ const App = () => {
     labels: ["A", "B", "C", "D", "E", "F"],
     datasets: [
       {
-        data: [20, 45, 28, 80, 99, 43]
+        data: cData
       }
     ]
   };
